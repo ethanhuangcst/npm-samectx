@@ -190,6 +190,31 @@ skill.search('关键词', 'project-name')
 }
 ```
 
+## 技能更新
+
+### 快速更新
+
+```bash
+# 进入技能目录
+cd .trae/skills/trae-context-gist
+
+# 运行更新脚本
+./update.sh        # macOS/Linux
+# 或
+.\update.ps1       # Windows
+```
+
+### 手动更新
+
+```bash
+# 拉取最新代码
+git pull origin main
+```
+
+### 📖 详细更新指南
+
+请查看 [UPDATE_GUIDE.md](UPDATE_GUIDE.md) 了解完整的更新方法和最佳实践。
+
 ## 故障排除
 
 ### 问题：npm install 失败
