@@ -140,5 +140,35 @@
     "description": "TRAE CN 上下文笔记（本地）- default",
     "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/skills/trae-context-gist/notes/default/context_2026-03-18T08-10-21-427Z.json",
     "syncStatus": "local-only"
+  },
+  "context_2026-03-18T10-33-19-821Z": {
+    "fileName": "context_2026-03-18T10-33-19-821Z.json",
+    "projectName": "traecontextgistskill",
+    "createdAt": "2026-03-18T10:33:19.821Z",
+    "updatedAt": "2026-03-18T10:33:19.821Z",
+    "url": null,
+    "description": "TRAE CN 上下文笔记（本地）- traecontextgistskill",
+    "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/skills/trae-context-gist/notes/traecontextgistskill/context_2026-03-18T10-33-19-821Z.json",
+    "syncStatus": "local-only"
+  },
+  "dbb4fdfdec1aa320c9d85041ccbf4f48": {
+    "fileName": "context_2026-03-18T10-36-24-323Z.json",
+    "projectName": "default",
+    "createdAt": "2026-03-18T10:36:24Z",
+    "updatedAt": "2026-03-18T10:36:25Z",
+    "url": "https://gist.github.com/ethanhuangcst/dbb4fdfdec1aa320c9d85041ccbf4f48",
+    "description": "TRAE CN 上下文笔记 - default",
+    "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/skills/trae-context-gist/notes/default/context_2026-03-18T10-36-24-323Z.json",
+    "syncStatus": "synced"
+  },
+  "f127c9bcfd28f65bff506278e252458c": {
+    "fileName": "context_2026-03-18T10-42-47-641Z.json",
+    "projectName": "traecontextgist_",
+    "createdAt": "2026-03-18T10:42:48Z",
+    "updatedAt": "2026-03-18T10:42:49Z",
+    "url": "https://gist.github.com/ethanhuangcst/f127c9bcfd28f65bff506278e252458c",
+    "description": "TRAE CN 上下文笔记 - traecontextgist_",
+    "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/skills/trae-context-gist/notes/traecontextgist_/context_2026-03-18T10-42-47-641Z.json",
+    "syncStatus": "synced"
   }
 }
