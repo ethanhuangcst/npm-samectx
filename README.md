@@ -29,40 +29,48 @@ gctx list
 
 ## 命令
 
-### `sync` - 同步上下文
+### `sync` (别名: `s`) - 同步上下文
 
 ```bash
 gctx sync [options]
+# 或简写
+gctx s
 
 选项:
   -p, --project <name>  指定项目名称（默认从当前目录提取）
   -d, --dir <path>      指定笔记存储目录
 ```
 
-### `list` - 列出笔记
+### `list` (别名: `l`) - 列出笔记
 
 ```bash
 gctx list [options]
+# 或简写
+gctx l
 
 选项:
   -p, --project <name>  筛选指定项目的笔记
   -l, --local           只显示本地笔记
 ```
 
-### `config` - 配置
+### `config` (别名: `c`) - 配置
 
 ```bash
 gctx config [options]
+# 或简写
+gctx c
 
 选项:
   -t, --token <token>   设置 GitHub Token
   -s, --show            显示当前配置
 ```
 
-### `init` - 初始化项目
+### `init` (别名: `i`) - 初始化项目
 
 ```bash
 gctx init
+# 或简写
+gctx i
 ```
 
 ## 获取 GitHub Token
@@ -105,4 +113,4 @@ your-project/
 
 ---
 
-**GitHub**: https://github.com/ethanhuangcst/trae-context-gist
+**GitHub**: https://github.com/ethanhuangcst/gctx
