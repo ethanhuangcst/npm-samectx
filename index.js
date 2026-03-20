@@ -621,7 +621,7 @@ module.exports = {
   version: '1.0.0',
   description: '自动整理对话上下文并存储到 GitHub Gist（支持本地同步）',
   triggers: {
-    manual: ['同步上下文', 'sync context'],
+    manual: ['整理上下文', '同步上下文', 'sync context'],
     schedule: 'hourly',
     autoOnEnd: true
   },
