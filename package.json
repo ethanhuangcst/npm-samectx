@@ -1,10 +1,10 @@
 {
-  "name": "trae-context-gist",
+  "name": "gctx",
   "version": "1.0.0",
-  "description": "TRAE CN 上下文管理工具 - 整理对话上下文并同步到 GitHub Gist",
+  "description": "Context sync tool - 整理对话上下文并同步到 GitHub Gist",
   "main": "src/index.js",
   "bin": {
-    "trae-context-gist": "./bin/trae-context-gist"
+    "gctx": "./bin/gctx"
   },
   "files": [
     "bin",
@@ -15,11 +15,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "trae",
     "context",
     "gist",
-    "manager",
-    "cli"
+    "sync",
+    "cli",
+    "trae"
   ],
   "author": "",
   "license": "MIT",

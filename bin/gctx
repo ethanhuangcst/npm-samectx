@@ -5,8 +5,8 @@ const pkg = require('../package.json');
 const cli = require('../src/cli');
 
 program
-  .name('trae-context-gist')
-  .description('TRAE CN 上下文管理工具 - 整理对话上下文并同步到 GitHub Gist')
+  .name('gctx')
+  .description('Context sync tool - 整理对话上下文并同步到 GitHub Gist')
   .version(pkg.version);
 
 program

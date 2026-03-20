@@ -1,5 +1,5 @@
 /**
- * trae-context-gist - TRAE CN 上下文管理工具
+ * gctx - Context sync tool
  * 整理对话上下文并同步到 GitHub Gist
  */
 
@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const CONFIG_DIR = path.join(os.homedir(), '.trae-context-gist');
+const CONFIG_DIR = path.join(os.homedir(), '.gctx');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 const GIST_MAPPING_FILE = path.join(CONFIG_DIR, 'gist-mapping.json');
 
@@ -76,7 +76,7 @@ function getProjectNotesDir(customDir) {
     return path.join(process.cwd(), notesDir);
   }
   
-  return path.join(process.cwd(), 'trae-content-gist-notes');
+  return path.join(process.cwd(), 'gctx-notes');
 }
 
 function analyzeContext(conversationHistory) {
@@ -127,7 +127,7 @@ function analyzeContext(conversationHistory) {
         conversationLength: JSON.stringify(jsonData).split('\n').length,
         metadata: {
           version: '1.0.0',
-          tool: 'trae-context-gist',
+          tool: 'gctx',
           format: 'json'
         }
       };
