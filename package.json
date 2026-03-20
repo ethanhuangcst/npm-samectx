@@ -1,10 +1,10 @@
 {
-  "name": "ctxg",
+  "name": "synctx",
   "version": "1.0.0",
   "description": "Context sync tool - 整理对话上下文并同步到 GitHub Gist",
   "main": "src/index.js",
   "bin": {
-    "ctxg": "./bin/ctxg"
+    "synctx": "./bin/synctx"
   },
   "files": [
     "bin",

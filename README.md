@@ -1,4 +1,4 @@
-# ctxg
+# synctx
 
 Context sync tool - 整理对话上下文并同步到 GitHub Gist
 
@@ -8,23 +8,23 @@ Context sync tool - 整理对话上下文并同步到 GitHub Gist
 
 ```bash
 # 全局安装
-npm install -g ctxg
+npm install -g synctx
 
 # 或使用 npx（无需安装）
-npx ctxg --help
+npx synctx --help
 ```
 
 ## 快速开始
 
 ```bash
 # 1. 配置 GitHub Token
-ctxg config --token ghp_your_token_here
+synctx config --token ghp_your_token_here
 
 # 2. 同步上下文
-ctxg sync
+synctx sync
 
 # 3. 查看笔记列表
-ctxg list
+synctx list
 ```
 
 ## 命令
@@ -32,9 +32,9 @@ ctxg list
 ### `sync` (别名: `s`) - 同步上下文
 
 ```bash
-ctxg sync [options]
+synctx sync [options]
 # 或简写
-ctxg s
+synctx s
 
 选项:
   -p, --project <name>  指定项目名称（默认从当前目录提取）
@@ -44,9 +44,9 @@ ctxg s
 ### `list` (别名: `l`) - 列出笔记
 
 ```bash
-ctxg list [options]
+synctx list [options]
 # 或简写
-ctxg l
+synctx l
 
 选项:
   -p, --project <name>  筛选指定项目的笔记
@@ -56,9 +56,9 @@ ctxg l
 ### `config` (别名: `c`) - 配置
 
 ```bash
-ctxg config [options]
+synctx config [options]
 # 或简写
-ctxg c
+synctx c
 
 选项:
   -t, --token <token>   设置 GitHub Token
@@ -68,15 +68,15 @@ ctxg c
 ### `init` (别名: `i`) - 初始化项目
 
 ```bash
-ctxg init
+synctx init
 # 或简写
-ctxg i
+synctx i
 ```
 
 ## 获取 GitHub Token
 
 1. 访问 https://github.com/settings/tokens/new
-2. Note: `ctxg`
+2. Note: `synctx`
 3. Expiration: 选择 `Custom` → 设置 1 年后
 4. Select scopes: ✅ `gist`
 5. 点击 Generate token，复制保存
@@ -84,12 +84,12 @@ ctxg i
 ## 目录结构
 
 ```
-~/.ctxg/                       # 全局配置目录
+~/.synctx/                     # 全局配置目录
 ├── config.json                # 配置文件（Token）
 └── gist-mapping.json          # 项目-Gist 映射
 
 your-project/
-└── ctxg-notes/                # 本地笔记
+└── synctx-notes/              # 本地笔记
     ├── context_2026-03-20.json
     └── ...
 ```
@@ -98,17 +98,17 @@ your-project/
 
 | 工具 | 使用方式 |
 |------|---------|
-| TRAE CN | `npx ctxg sync` |
-| Cursor | `npx ctxg sync` |
-| Claude Code | `npx ctxg sync` |
-| 终端 | `ctxg sync` |
+| TRAE CN | `npx synctx sync` |
+| Cursor | `npx synctx sync` |
+| Claude Code | `npx synctx sync` |
+| 终端 | `synctx sync` |
 
 ## 故障排除
 
 | 问题 | 解决方案 |
 |------|---------|
-| Token 未配置 | 运行 `ctxg config --token <your-token>` |
-| 笔记位置错误 | 检查项目根目录下的 `ctxg-notes/` |
+| Token 未配置 | 运行 `synctx config --token <your-token>` |
+| 笔记位置错误 | 检查项目根目录下的 `synctx-notes/` |
 | Gist 上传失败 | 检查 Token 权限和有效期；本地笔记仍可用 |
 
 ---
