@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # trae-context-gist 傻瓜式快速配置脚本
-# 一键配置项目级技能
+# 使用符号链接实现多项目共享
 
 set -e
 
@@ -21,6 +21,11 @@ if [ ! -d ~/.trae/skills/trae-context-gist ]; then
     echo "✅ 全局技能已安装"
 else
     echo "✅ 全局技能已存在"
+    
+    # 更新全局技能
+    echo "🔄 更新全局技能..."
+    cd ~/.trae/skills/trae-context-gist
+    git pull origin main || true
 fi
 
 # 步骤 2：检查 GitHub Token
@@ -84,7 +89,7 @@ if [ "$SKIP_TOKEN" != true ]; then
 GITHUB_TOKEN=$token
 EOF
     chmod 600 ~/.trae/skills/trae-context-gist/.env
-    echo "✅ GitHub Token 已保存"
+    echo "✅ GitHub Token 已保存到全局目录"
 fi
 
 # 步骤 3：安装依赖
@@ -98,7 +103,7 @@ else
     echo "✅ 依赖已存在"
 fi
 
-# 步骤 4：复制技能文件到项目目录（关键！）
+# 步骤 4：创建项目配置（使用符号链接）
 echo ""
 echo "📄 步骤 4/4：配置项目技能..."
 cd "$PROJECT_DIR"
@@ -106,15 +111,16 @@ cd "$PROJECT_DIR"
 # 创建项目技能目录
 mkdir -p .trae/skills
 
-# 复制技能文件到项目目录
-echo "正在复制技能文件到项目目录..."
-cp -r ~/.trae/skills/trae-context-gist .trae/skills/
-
-# 创建 .env 文件的符号链接或复制
-if [ -f ~/.trae/skills/trae-context-gist/.env ]; then
-    cp ~/.trae/skills/trae-context-gist/.env .trae/skills/trae-context-gist/.env
-    echo "✅ GitHub Token 已复制到项目"
+# 删除旧的符号链接或目录
+if [ -L .trae/skills/trae-context-gist ]; then
+    rm .trae/skills/trae-context-gist
+elif [ -d .trae/skills/trae-context-gist ]; then
+    rm -rf .trae/skills/trae-context-gist
 fi
+
+# 创建符号链接
+ln -s ~/.trae/skills/trae-context-gist .trae/skills/trae-context-gist
+echo "✅ 已创建符号链接到全局技能目录"
 
 # 创建配置文件（使用相对路径）
 cat > .trae/config.json << 'EOF'
@@ -147,8 +153,13 @@ echo "======================================"
 echo ""
 echo "📁 项目目录：$PROJECT_DIR"
 echo "📄 配置文件：.trae/config.json"
-echo "📂 技能目录：.trae/skills/trae-context-gist"
-echo "🔑 Token 文件：.trae/skills/trae-context-gist/.env"
+echo "🔗 技能链接：.trae/skills/trae-context-gist -> ~/.trae/skills/trae-context-gist"
+echo "🔑 Token 文件：~/.trae/skills/trae-context-gist/.env（全局共享）"
+echo ""
+echo "✨ 优势："
+echo "  - 只需维护一份技能文件"
+echo "  - 更新全局目录，所有项目自动更新"
+echo "  - GitHub Token 只需配置一次"
 echo ""
 echo "🎉 现在可以在 TRAE 中使用："
 echo "   输入 '整理上下文' 测试技能"
