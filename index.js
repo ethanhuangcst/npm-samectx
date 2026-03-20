@@ -276,6 +276,36 @@ function saveNoteToLocal(content, fileName, projectName) {
  * @param {string} projectName - 项目名称
  * @returns {Promise<object>} Gist 信息
  */
+const MAX_GIST_FILES = 50;
+
+const GIST_MAPPING_FILE = path.join(__dirname, 'gist-mapping.json');
+
+function getGistMapping() {
+  if (fs.existsSync(GIST_MAPPING_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(GIST_MAPPING_FILE, 'utf8'));
+    } catch (e) {
+      return {};
+    }
+  }
+  return {};
+}
+
+function saveGistMapping(mapping) {
+  fs.writeFileSync(GIST_MAPPING_FILE, JSON.stringify(mapping, null, 2));
+}
+
+function getGistIdForProject(projectName) {
+  const mapping = getGistMapping();
+  return mapping[projectName] || null;
+}
+
+function setGistIdForProject(projectName, gistId) {
+  const mapping = getGistMapping();
+  mapping[projectName] = gistId;
+  saveGistMapping(mapping);
+}
+
 async function uploadToGist(content, fileName, projectName) {
   const token = process.env.GITHUB_TOKEN;
   
@@ -283,7 +313,6 @@ async function uploadToGist(content, fileName, projectName) {
     throw new Error('GitHub Token 未配置，请检查 .env 文件');
   }
   
-  // 使用 TRAE CN 内置的 fetch 或 node-fetch
   let fetchFn;
   if (typeof fetch !== 'undefined') {
     fetchFn = fetch;
@@ -296,10 +325,57 @@ async function uploadToGist(content, fileName, projectName) {
     }
   }
   
-  // 构建 Gist 描述，包含项目名称
-  const description = `TRAE CN 上下文笔记 - ${projectName}`;
+  const description = `TRAE CN - ${projectName}`;
+  const existingGistId = getGistIdForProject(projectName);
   
-  // 构建文件对象
+  if (existingGistId) {
+    try {
+      const getResponse = await fetchFn(`https://api.github.com/gists/${existingGistId}`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'User-Agent': 'TRAE-CN-ContextManager'
+        }
+      });
+      
+      if (getResponse.ok) {
+        const existingGist = await getResponse.json();
+        const existingFiles = Object.keys(existingGist.files || {});
+        
+        const files = {};
+        
+        if (existingFiles.length >= MAX_GIST_FILES) {
+          const filesToDelete = existingFiles.slice(0, existingFiles.length - MAX_GIST_FILES + 1);
+          filesToDelete.forEach(f => {
+            files[f] = null;
+          });
+        }
+        
+        files[fileName] = {
+          content: JSON.stringify(content, null, 2)
+        };
+        
+        const updateResponse = await fetchFn(`https://api.github.com/gists/${existingGistId}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+            'User-Agent': 'TRAE-CN-ContextManager'
+          },
+          body: JSON.stringify({
+            description: description,
+            files: files
+          })
+        });
+        
+        if (updateResponse.ok) {
+          return await updateResponse.json();
+        }
+      }
+    } catch (e) {
+      console.warn(`更新现有 Gist 失败，将创建新 Gist: ${e.message}`);
+    }
+  }
+  
   const files = {};
   files[fileName] = {
     content: JSON.stringify(content, null, 2)
@@ -324,7 +400,10 @@ async function uploadToGist(content, fileName, projectName) {
     throw new Error(`上传失败 (${response.status}): ${errorText}`);
   }
   
-  return await response.json();
+  const gistInfo = await response.json();
+  setGistIdForProject(projectName, gistInfo.id);
+  
+  return gistInfo;
 }
 
 /**
