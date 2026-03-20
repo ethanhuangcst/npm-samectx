@@ -12,89 +12,27 @@ const path = require('path');
  * @returns {string} 项目名称
  */
 function extractProjectName(conversationHistory) {
-  const globalTraeDir = path.join(process.env.HOME || '/Users/ethanhuang', '.trae');
-  
-  function findProjectRoot(startDir) {
-    let currentDir = path.resolve(startDir);
-    for (let i = 0; i < 20; i++) {
-      if (currentDir === globalTraeDir || currentDir.startsWith(globalTraeDir + path.sep)) {
-        return null;
-      }
-      
-      const traeDir = path.join(currentDir, '.trae');
-      if (fs.existsSync(traeDir)) {
-        return currentDir;
-      }
-      
-      const parentDir = path.dirname(currentDir);
-      if (parentDir === currentDir) break;
-      currentDir = parentDir;
-    }
-    return null;
-  }
-  
-  let projectRoot = findProjectRoot(process.cwd());
-  if (!projectRoot) {
-    projectRoot = findProjectRoot(path.resolve(__dirname));
-  }
-  
-  if (projectRoot) {
-    let projectName = path.basename(projectRoot);
-    projectName = projectName.replace(/[^a-zA-Z0-9_-]/g, '_');
-    return projectName;
-  }
-  
-  return 'default';
+  const cwd = process.cwd();
+  let projectName = path.basename(cwd);
+  projectName = projectName.replace(/[^a-zA-Z0-9_-]/g, '_');
+  return projectName;
 }
 
 /**
  * 获取项目特定的笔记目录路径
- * @param {string} projectName - 项目名称
  * @returns {string} 项目笔记目录路径
  */
 function getProjectNotesDir() {
   if (process.env.LOCAL_NOTES_DIR) {
     const notesDir = process.env.LOCAL_NOTES_DIR;
     if (!path.isAbsolute(notesDir)) {
-      return path.join(__dirname, notesDir);
+      return path.join(process.cwd(), notesDir);
     } else {
       return notesDir;
     }
   }
   
-  const globalTraeDir = path.join(process.env.HOME || '/Users/ethanhuang', '.trae');
-  const skillDir = path.resolve(__dirname);
-  
-  function findProjectRoot(startDir) {
-    let currentDir = path.resolve(startDir);
-    for (let i = 0; i < 20; i++) {
-      if (currentDir === globalTraeDir || currentDir.startsWith(globalTraeDir + path.sep)) {
-        return null;
-      }
-      
-      const traeDir = path.join(currentDir, '.trae');
-      if (fs.existsSync(traeDir)) {
-        return currentDir;
-      }
-      
-      const parentDir = path.dirname(currentDir);
-      if (parentDir === currentDir) break;
-      currentDir = parentDir;
-    }
-    return null;
-  }
-  
-  let projectRoot = findProjectRoot(process.cwd());
-  
-  if (!projectRoot) {
-    projectRoot = findProjectRoot(skillDir);
-  }
-  
-  if (!projectRoot) {
-    return path.join(skillDir, 'notes');
-  }
-  
-  return path.join(projectRoot, '.trae', 'notes');
+  return path.join(process.cwd(), 'trae-content-gist-notes');
 }
 
 // 加载环境变量
@@ -114,7 +52,6 @@ if (fs.existsSync(envPath)) {
  * @returns {string} 本地笔记目录路径
  */
 function getNotesDir() {
-  // 默认使用技能目录下的 notes 文件夹
   return path.join(__dirname, 'notes');
 }
 
@@ -433,7 +370,6 @@ function updateLocalIndex(gistInfo, localInfo) {
   if (gistInfo) {
     index[gistInfo.id] = indexEntry;
   } else {
-    // 如果没有 gistInfo，使用文件名作为 key
     const fileKey = fileName.replace('.json', '');
     index[fileKey] = indexEntry;
   }
@@ -458,14 +394,11 @@ function searchNotes(keyword, projectName) {
     const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
     const results = [];
     
-    // 搜索逻辑
     Object.entries(index).forEach(([id, info]) => {
-      // 如果指定了项目名称，先检查项目名称
       if (projectName && info.projectName !== projectName) {
         return;
       }
       
-      // 关键词搜索
       if (info.fileName.includes(keyword) || 
           (info.description && info.description.includes(keyword)) ||
           (info.projectName && info.projectName.includes(keyword))) {
@@ -486,20 +419,13 @@ function searchNotes(keyword, projectName) {
  */
 async function processContext(conversationHistory) {
   try {
-    // 分析上下文
     const analysis = analyzeContext(conversationHistory);
-    
-    // 提取项目名称
     const projectName = extractProjectName(conversationHistory);
-    
-    // 生成文件名
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const fileName = `context_${timestamp}.json`;
     
-    // 首先保存到本地
     const localInfo = saveNoteToLocal(analysis, fileName, projectName);
     
-    // 尝试上传到 Gist
     let gistInfo = null;
     let gistUploadSuccess = true;
     let gistError = null;
@@ -512,7 +438,6 @@ async function processContext(conversationHistory) {
       console.warn(`警告：Gist 同步失败，但本地已保存：${error.message}`);
     }
     
-    // 更新本地索引
     updateLocalIndex(gistInfo, localInfo);
     
     if (gistUploadSuccess) {
@@ -533,7 +458,7 @@ async function processContext(conversationHistory) {
       };
     } else {
       return {
-        success: true, // 本地保存成功，所以整体算成功
+        success: true,
         message: `上下文已整理并保存到本地，但同步到 Gist 失败：${gistError}（项目：${projectName}）`,
         localPath: localInfo.localPath,
         projectName: projectName,
@@ -571,7 +496,6 @@ function getAllNotes(projectName) {
     const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
     const notes = Object.entries(index).map(([id, info]) => ({ id, ...info }));
     
-    // 如果指定了项目名称，过滤结果
     if (projectName) {
       return notes.filter(note => note.projectName === projectName);
     }
@@ -588,10 +512,8 @@ function getAllNotes(projectName) {
  * @returns {object|null} 笔记内容
  */
 function loadNoteContent(noteId) {
-  // 获取本地笔记目录（支持配置）
   const notesDir = getNotesDir();
   
-  // 尝试从索引中查找
   const indexPath = path.join(__dirname, 'index.json');
   if (fs.existsSync(indexPath)) {
     try {
@@ -602,20 +524,17 @@ function loadNoteContent(noteId) {
         return JSON.parse(fs.readFileSync(note.localPath, 'utf8'));
       }
       
-      // 如果索引中没有，尝试直接查找文件
       const possibleFile = path.join(notesDir, `${noteId}.json`);
       if (fs.existsSync(possibleFile)) {
         return JSON.parse(fs.readFileSync(possibleFile, 'utf8'));
       }
     } catch (e) {
-      // 忽略错误
     }
   }
   
   return null;
 }
 
-// 导出技能
 module.exports = {
   name: 'trae-context-gist',
   version: '1.0.0',
