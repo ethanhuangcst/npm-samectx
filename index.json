@@ -230,5 +230,25 @@
     "description": "TRAE CN 上下文笔记 - traecontextgist_JSON_",
     "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/skills/trae-context-gist/notes/traecontextgist_JSON_/context_2026-03-18T11-37-26-045Z.json",
     "syncStatus": "synced"
+  },
+  "9c93dda612431b90c80b3b811a3cad42": {
+    "fileName": "context_2026-03-20T04-00-02-082Z.json",
+    "projectName": "traecontextgist_",
+    "createdAt": "2026-03-20T04:00:03Z",
+    "updatedAt": "2026-03-20T04:00:04Z",
+    "url": "https://gist.github.com/ethanhuangcst/9c93dda612431b90c80b3b811a3cad42",
+    "description": "TRAE CN 上下文笔记 - traecontextgist_",
+    "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/skills/trae-context-gist/notes/traecontextgist_/context_2026-03-20T04-00-02-082Z.json",
+    "syncStatus": "synced"
+  },
+  "85fd64e9460c974147ae608893fe49a9": {
+    "fileName": "context_2026-03-20T05-23-24-613Z.json",
+    "projectName": "penlite",
+    "createdAt": "2026-03-20T05:23:26Z",
+    "updatedAt": "2026-03-20T05:23:27Z",
+    "url": "https://gist.github.com/ethanhuangcst/85fd64e9460c974147ae608893fe49a9",
+    "description": "TRAE CN 上下文笔记 - penlite",
+    "localPath": "/Users/ethanhuang/code/trae-context-gist.ai/.trae/notes/penlite/context_2026-03-20T05-23-24-613Z.json",
+    "syncStatus": "synced"
   }
 }
